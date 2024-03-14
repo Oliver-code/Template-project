@@ -2,6 +2,8 @@ from cmath import rect
 import pygame
 import sys
 
+from scripts.entities import PhysicsEntity
+
 class Game:
     def __init__(self) -> None:
         pygame.init()
@@ -33,7 +35,7 @@ class Game:
             "down" : [pygame.K_DOWN],
             "jump" : [pygame.K_LSHIFT, pygame.K_RSHIFT]
         }
-        
+                  
     def get_input(self):
         
         # When an input is detected, checks if it is bound in the input bindings(each binding is a list 
@@ -55,12 +57,16 @@ class Game:
                                 if keycode == event.key:
                                     self.input[bindings][1] = True
                                     self.input[bindings][2] = False
-                                    
+            
     def run(self):
         
-        test_rect = pygame.Rect(10,10,100,100)
+        test_entity = PhysicsEntity(self,"test", [400,100])
+        test_entity.speed = 5
+            
         running = True
         while running:
+            
+            # gets input first
             self.input_data = pygame.event.get()
             for event in self.input_data:
                     if event.type == pygame.QUIT:
@@ -68,32 +74,30 @@ class Game:
                         sys.exit()
             self.get_input()
             
+            # backround fill
             self.display.fill("#FFFFFF")
+
             
-            rect_color = "#000000"
             
-            if self.input["jump"][0]:
-                rect_color = "#f8fc03"
-                if self.input["jump"][1]:
-                    rect_color = "#fc9d03"
-            elif self.input["jump"][1]:
-                rect_color = "#fc3103"
-            elif self.input["jump"][2]:
-                rect_color = "#03fc0f"
-            pygame.draw.rect(self.display, rect_color, test_rect)
+            # updating
+            test_entity.update()
+            test_entity.direction += 0.1
             
+            # rendering, renders everything in the entities list.
+            test_entity.render_circle(self.display) 
+            
+            # everything is rendered to a temporary display, this renders the temporary display onto the actual. 
+            # that allows screen scaling and screen movement etc
             self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0,0))
             
+            # required at end of frame
             pygame.display.update()
 
             self.clock.tick(50)
 
             
                         
-            
-                    
+          
 Game().run()
-                    
-        
-        
+                        
         
