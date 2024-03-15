@@ -2,7 +2,7 @@ from cmath import rect
 import pygame
 import sys
 
-from scripts.entities import Apple, PhysicsSprite
+from scripts.entities import Cherry, PhysicsSprite
 
 class Game:
     def __init__(self) -> None:
@@ -63,14 +63,10 @@ class Game:
     def run(self):
         
         test_entity = PhysicsSprite(self,"test", [400,100])
-        apple = Apple(self, [100,100])
+        apple = Cherry(self, [100,100])
         
-        t = 0    
         running = True
         while running:
-            # keeps track of frame
-            t += 1
-            
             # gets input first
             self.input_data = pygame.event.get()
             for event in self.input_data:

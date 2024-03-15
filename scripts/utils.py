@@ -8,6 +8,3 @@ def load_image(path):
     # if i was less lazy and didn't use convert alpha
     # img.set_colorkey((0, 0, 0))
     return img
-    
-
-

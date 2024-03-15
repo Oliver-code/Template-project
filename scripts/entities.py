@@ -44,9 +44,19 @@ class PhysicsSprite:
         draw_offset = (self.pos[0] - offset[0], self.pos[1] - offset[1])
         pygame.draw.circle(surface, "#000000", draw_offset, (self.size[0]+self.size[1])/2)
     
-class Apple(PhysicsSprite):
+class Cherry(PhysicsSprite):
     def __init__(self, game, pos, size=[10,10]):
-        super().__init__(game, 'apple', pos, size)
+        super().__init__(game, 'cherry', pos, size)
         
         self.image = load_image("cherry1.png")
+        size = self.image.get_bounding_rect()
+        
+class Spawner(PhysicsSprite):
+    def __init__(self, game, pos, size=[10,10]):
+            super().__init__(game, 'spawner', pos, size)
+            
+            self.image = None
+    
+    def SpawnObject(self, entity : PhysicsSprite, pos):
+        self.game.spawned_objects.append(entity(self.game, self.pos))
         
