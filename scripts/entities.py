@@ -1,16 +1,19 @@
 import pygame
 import math
-
-class PhysicsEntity:
+from scripts.utils import load_image
+class PhysicsSprite:
     def __init__(self, game, e_type, pos, size=[10,10]):
         self.game = game
         self.pos = list(pos)
-        self.e_type = e_type
         self.size = list(size)
         self.velocity = [0,0]
         self.acceleration =[0,0]
         self.speed = 0
         self.direction = 0
+        
+        self.e_type = e_type
+        #set an image for each type of object
+        self.image = None
     
     def update(self):
         
@@ -29,11 +32,21 @@ class PhysicsEntity:
 
         
     def render(self, surface):
-        surface.blit(self.image, self.pos)
+        offset = self.game.render_offset
+        draw_offset = (self.pos[0] - offset[0], self.pos[1] - offset[1])
+        surface.blit(self.image, draw_offset)
     def render_hitbox(self, surface):
-        pygame.draw.rect(surface, "#000000", pygame.Rect(self.pos, self.size))
+        offset = self.game.render_offset
+        draw_offset = (self.pos[0] - offset[0], self.pos[1] - offset[1])
+        pygame.draw.rect(surface, "#000000", pygame.Rect(draw_offset, self.size))
     def render_circle(self, surface):
-        pygame.draw.circle(surface, "#000000", self.pos, (self.size[0]+self.size[1])/2)
+        offset = self.game.render_offset
+        draw_offset = (self.pos[0] - offset[0], self.pos[1] - offset[1])
+        pygame.draw.circle(surface, "#000000", draw_offset, (self.size[0]+self.size[1])/2)
     
-    
-    
+class Apple(PhysicsSprite):
+    def __init__(self, game, pos, size=[10,10]):
+        super().__init__(game, 'apple', pos, size)
+        
+        self.image = load_image("cherry1.png")
+        

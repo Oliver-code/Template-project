@@ -2,7 +2,7 @@ from cmath import rect
 import pygame
 import sys
 
-from scripts.entities import PhysicsEntity
+from scripts.entities import Apple, PhysicsSprite
 
 class Game:
     def __init__(self) -> None:
@@ -13,6 +13,8 @@ class Game:
         pygame.display.set_caption("My game")
         self.screen = pygame.display.set_mode((800, 608))
         self.display = pygame.Surface((800, 608))
+        self.camera = [0,0]
+        self.render_offset = self.camera
         
         
         self.input_data = []
@@ -60,11 +62,14 @@ class Game:
             
     def run(self):
         
-        test_entity = PhysicsEntity(self,"test", [400,100])
-        test_entity.speed = 5
-            
+        test_entity = PhysicsSprite(self,"test", [400,100])
+        apple = Apple(self, [100,100])
+        
+        t = 0    
         running = True
         while running:
+            # keeps track of frame
+            t += 1
             
             # gets input first
             self.input_data = pygame.event.get()
@@ -77,14 +82,16 @@ class Game:
             # backround fill
             self.display.fill("#FFFFFF")
 
-            
-            
             # updating
             test_entity.update()
-            test_entity.direction += 0.1
+            apple.update
+            
+            # update camera
+            self.render_offset = [round(self.camera[0]),round(self.camera[1])]
             
             # rendering, renders everything in the entities list.
             test_entity.render_circle(self.display) 
+            apple.render(self.display)
             
             # everything is rendered to a temporary display, this renders the temporary display onto the actual. 
             # that allows screen scaling and screen movement etc
